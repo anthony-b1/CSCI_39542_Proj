@@ -21,8 +21,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://github.com/anthony-b1/CSCI_39542_Proj">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mailto: Anthony.Bi05@myhunter.cuny.edu">Contact</a></li>
                     </ul>
                 </div>
             </div>
@@ -39,20 +39,19 @@
         </header>
         <!-- Content section-->
         
-        <p align="center"><iframe src="html/choropleth.html" height="500" width="600" seamless></iframe></p>
         
         <section class="py-5">
             <div class="container my-5">
                 <div class="row justify-content-center">
                     
                     <style> p{text-align: center;}</style>
-                    <p><img src='project_images/Figure_1.png' alt='fig1' width="800" height="700"> 
+                    <p><img src='project_images/bargraph.png' alt='fig1' width="700" height="600"> 
                         
                     <style> h2{text-align: center;}</style>
                     <h2>Line graphs comparing the number of crimes in 2019, 2020, and 2021</h2>
                     <p></p>
-                    <p><img src='project_images/Figure_2.png' alt='fig1' width="500" height="500">
-                        <img src='project_images/Figure_3.png' alt='fig1' width="600" height="500">
+                    <p><img src='project_images/LineGraph1.png' alt='fig1' width="500" height="500">
+                        <img src='project_images/LineGraph2.png' alt='fig1' width="600" height="500">
                     </p>
                     
                     <div class="col-lg-6">
@@ -79,7 +78,14 @@
                     
                     <style> h2{text-align: center;}</style>
                     <h2>Choropleth map of the number of crimes in 2019</h2>
-                    <p><img src='project_images/newplot(1).png' alt='fig1' width="800" height="600"></p>
+                
+                    <p align="center"><iframe src="plots_in_html/choropleth2019.html" height="600" width="800" seamless></iframe></p>
+                    
+                    <h2>Choropleth map of the number of crimes in 2020</h2>
+                    <p align="center"><iframe src="plots_in_html/choropleth2020.html" height="600" width="800" seamless></iframe></p>
+                    
+                    <h2>Choropleth map of the number of crimes in 2021</h2>
+                    <p align="center"><iframe src="plots_in_html/choropleth2021.html" height="600" width="800" seamless></iframe></p>
                     
                     <div class="col-lg-6">
                         
@@ -93,8 +99,23 @@
                 </div>
             </div>
         </section>
+        
+        
+        
+        
         <!-- Footer-->
         <footer class="py-5 bg-dark">
+            <div class="col-md-4 mb-3 mb-md-0 mx-auto">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Email</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50"><a href="mailto: anthony.bi05@myhunter.cuny.edu">anthony.bi05@myhunter.cuny.edu</a></div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
         </footer>
         <!-- Bootstrap core JS-->
