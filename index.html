@@ -10,6 +10,14 @@
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        
     </head>
     <body>
         <!-- Responsive navbar-->
@@ -38,9 +46,47 @@
             </div>
         </header>
         <!-- Content section-->
+        <!-- <section class="features-icons bg-light text-center"> -->
         
+        <section class="py-5 features-icons text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary" style="font-size: 2.00em;"></i></div>
+                            <h3>Overview</h3>
+                            <p class="lead mb-0">This project is an attempt to raise awareness of the crimes in NYC. I want to display the data on a map to identify any hotspots for crimes or identify any trends. Also, whether COVID increases the number of crimes in NYC. Since COVID, there has been an abundant amount of shocking hate crimes and it has affected me on a personal level. I want to contribute in some way to help the community.
+</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary" style="font-size: 2.00em;"></i></div>
+                            <h3>Data</h3>
+                            <p class="lead mb-0">
+                                <a href="https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Current-Year-To-Date-/5uac-w243">NYC OpenData: NYPD Complaint Data</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary" style="font-size: 2.00em;"></i></div>
+                            
+                            <h3>Techniques</h3>
+                            <ul>
+                                <li><p class="lead mb-0">Used PandaSQL to filter the dataset to get the desired columns</p></li>
+                                <li><p class="lead mb-0">Used matplotlib.pyplot to create the bar graphs and line graphs</p></li>
+                                <li><p class="lead mb-0">Used Plotly Express and GeoJSON to make the choropleth maps</p></li>
+                                <li><p class="lead mb-0">Used folium to make the maps with markers</p></li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         
-        <section class="py-5">
+        <section class="">
             <div class="container my-5">
                 <div class="row justify-content-center">
                     
@@ -69,7 +115,7 @@
         <!-- Image element - set the background image for the header in the line below-->
         <div class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/4ulffa6qoKA/1200x800')">
             <!-- Put anything you want here! The spacer below with inline CSS is just for demo purposes!-->
-            <div style="height: 20rem"></div>
+            <div style="height: 10rem"></div>
         </div>
         <!-- Content section-->
         <section class="py-5">
@@ -86,21 +132,36 @@
                     
                     <h2>Choropleth map of the number of crimes in 2021</h2>
                     <p align="center"><iframe src="plots_in_html/choropleth2021.html" height="600" width="800" seamless></iframe></p>
-                    
+                   
                     <div class="col-lg-6">
                         
                         <!--
                         <h2>Engaging Background Images</h2>
                         <p class="lead">The background images used in this template are sourced from Unsplash and are open source and free to use.</p>
                         <p class="mb-0">I can't tell you how many people say they were turned off from science because of a science teacher that completely sucked out all the inspiration and enthusiasm they had for the course.</p>
-                         -->
-                        
+                         -->  
                     </div>
+                    
                 </div>
             </div>
         </section>
         
+        <div class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/4ulffa6qoKA/1200x800')">
+            <!-- Put anything you want here! The spacer below with inline CSS is just for demo purposes!-->
+            <div style="height: 10rem"></div>
+        </div>
         
+        <section class="py-5">
+            <div class="container my-5">
+                
+                <h2>Folium map of the types of crimes in 2019</h2>
+                <p align="center"><iframe src="plots_in_html/Folium2019MarkerCluster.html" height="600" width="800" seamless></iframe></p>
+                
+                <h2>Folium map of the types of crimes in 2020</h2>
+                <p align="center"><iframe src="plots_in_html/Folium2020MarkerCluster.html" height="600" width="800" seamless></iframe></p>
+                
+            </div>
+        </section>
         
         
         <!-- Footer-->
