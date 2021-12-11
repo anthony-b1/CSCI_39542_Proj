@@ -111,6 +111,41 @@
                 .row:after {content: "";display: table;clear: both;}
                 p{text-align: center;}
             </style>
+            
+            <style> h2{text-align: center;}</style>
+            <h2><u>Using PandaSQL to get the desired columns and save it as a .csv file</u></h2>
+            
+            <div class="row">
+                <div class="column">
+                    <pre><code class=" python">
+                        import pandas as pd
+                        import pandasql as psql
+
+                        df = pd.read_csv('NYPD_Complaint_Data_Current_Year_To_Date_.csv')
+                        # Using pandasql to pick out the desire columns
+                        newDF = psql.sqldf("""
+                            SELECT BORO_NM, CMPLNT_FR_DT, LAW_CAT_CD, OFNS_DESC, X_COORD_CD, Y_COORD_CD, Lat_Lon
+                            FROM df
+                            ORDER BY CMPLNT_FR_DT ASC
+                        """)
+
+                        newDF.to_csv("Specific_Cols.csv", index = False)
+                    </code></pre>
+                </div>
+                <div class="column">
+                    <p><img src='project_images/Specific_Cols.png' alt='fig1' width="900" height="550"> 
+                </div>
+            </div>  
+            
+        </section>
+        
+        <section class="py-5">
+            <style>
+                .column { float: left;width: 50%; }
+                .citations ul { display:inline-table; }
+                .row:after {content: "";display: table;clear: both;}
+                p{text-align: center;}
+            </style>
             <div class="row">
                 <div class="column">
                     <pre><code class=" python">
