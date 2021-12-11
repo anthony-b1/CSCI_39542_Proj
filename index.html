@@ -29,6 +29,12 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
         
+        
+        <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        
     </head>
     <body>
         <!-- Responsive navbar-->
@@ -98,12 +104,46 @@
             </div>
         </section>
         
+        <section class="py-5">
+            <style>
+                .column { float: left;width: 50%; }
+                .citations ul { display:inline-table; }
+                .row:after {content: "";display: table;clear: both;}
+                p{text-align: center;}
+            </style>
+            <div class="row">
+                <div class="column">
+                    <pre><code class=" python">
+                        import pandas as pd
+                        import matplotlib.pyplot as plt
+
+                        df = pd.read_csv('Specific_Cols.csv')
+                        print(df['BORO_NM'].value_counts())
+                        # Making Bar Graph of the Total # of Crimes from each Borough
+                        print(df['BORO_NM'].value_counts().plot(kind = "bar"))
+                        plt.xticks(rotation=0, horizontalalignment="center")
+                        plt.title("Total Number of Crimes in each Borough from 2019 to 2021")
+                        plt.xlabel("Borough", fontsize=12, labelpad=10)
+                        plt.ylabel('Number of Crimes',fontsize=12, labelpad=10)
+                        # Putting values above each bar of bar graph
+                        boroNumsY = [91122, 79229, 69912, 67724, 13801]
+                        for i in range(5):
+                            plt.text(i, boroNumsY[i], boroNumsY[i], ha='center', va='bottom')
+                        plt.show()
+                    </code></pre>
+                </div>
+                <div class="column">
+                    <p><img src='project_images/bargraph.png' alt='fig1' width="700" height="600"> 
+                </div>
+            </div>  
+            
+        </section>
+        
         <section class="">
             <div class="container my-5">
                 <div class="row justify-content-center">
                     
                     <style> p{text-align: center;}</style>
-                    <p><img src='project_images/bargraph.png' alt='fig1' width="700" height="600"> 
                         
                     <style> h2{text-align: center;}</style>
                     <h2><u>Line graphs comparing the number of crimes in 2019, 2020, and 2021</u></h2>
@@ -124,45 +164,168 @@
                 </div>
             </div>
         </section>
+        
         <!-- Image element - set the background image for the header in the line below-->
         <div class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/4ulffa6qoKA/1200x800')">
             <!-- Put anything you want here! The spacer below with inline CSS is just for demo purposes!-->
             <div style="height: 10rem"></div>
         </div>
-        <!-- Content section-->
-        <section class="py-5">
-            <div class="container my-5">
-                <div class="row justify-content-center">
-                    
-                    <style> h2{text-align: center;}</style>
-                    <h2><u>Choropleth map of the number of crimes in 2019</u></h2>
-                
-                    <p align="center"><iframe src="plots_in_html/choropleth2019.html" height="600" width="800" seamless></iframe></p>
-                    
-                    <h2><u>Choropleth map of the number of crimes in 2020</u></h2>
-                    <p align="center"><iframe src="plots_in_html/choropleth2020.html" height="600" width="800" seamless></iframe></p>
-                    
-                    <h2><u>Choropleth map of the number of crimes in 2021</u></h2>
-                    <p align="center"><iframe src="plots_in_html/choropleth2021.html" height="600" width="800" seamless></iframe></p>
-                   
-                    <div class="col-lg-6">
-                        
-                        <!--
-                        <h2>Engaging Background Images</h2>
-                        <p class="lead">The background images used in this template are sourced from Unsplash and are open source and free to use.</p>
-                        <p class="mb-0">I can't tell you how many people say they were turned off from science because of a science teacher that completely sucked out all the inspiration and enthusiasm they had for the course.</p>
-                         -->  
-                    </div>
-                    
-                </div>
-            </div>
+
         </section>
         
+                
+        <section class="py-5">
+            <style>
+                .column { float: left;width: 50%; }
+                .citations ul { display:inline-table; }
+                .row:after {content: "";display: table;clear: both;}
+            </style>
+            
+            <div class="row">
+                <div class="column">
+                    <pre><code class=" python">
+                        import pandas as pd
+                        import json
+                        import plotly.express as px 
+
+                        df = pd.read_csv('Specific_Cols.csv') 
+                        #Making two columns, one is the borough name and the second is the count of crimes in each borough
+                        newDF = pd.DataFrame()
+                        newDF = df
+                        newDF['CMPLNT_FR_DT'] = pd.to_datetime(newDF['CMPLNT_FR_DT'])
+
+                        #Filtering only 2019
+                        mask = (newDF['CMPLNT_FR_DT'] < '2020-1-1') 
+
+                        newDF = newDF.loc[mask]
+                        newDF = newDF['BORO_NM'].value_counts().reset_index()
+                        newDF = newDF.rename({'index':'BORO_NM','BORO_NM':'Count'}, axis=1)
+                        newDF['BORO_NM'] = newDF['BORO_NM'].str.title()
+
+                        #Load geojson to get the geographical features of the boroughs 
+                        nyBoro = json.load(open('Borough Boundaries.geojson', 'r'))
+
+                        #See the id of each borough in geojson 
+                        boro_id_map = {}
+                        for feature in nyBoro['features']:
+                            feature['id'] = feature['properties']['boro_code']
+                            boro_id_map[feature['properties']['boro_name']] = feature['id']
+
+                        #Getting the id number of each borough
+                        newDF['id'] = newDF['BORO_NM'].apply(lambda x: boro_id_map[x])
+
+                        #Making the choropleth map
+                        fig = px.choropleth_mapbox(newDF, locations='id', geojson=nyBoro, color='Count', hover_name='BORO_NM', 
+                                hover_data=['Count'], mapbox_style='carto-positron', center={'lat': 40.7, 'lon': -74}, opacity=0.5)
+                        fig.show()
+                        fig.write_html('choropleth2019.html')
+                    </code></pre>
+                </div>
+                <div class="column">
+                    <h2><u>Choropleth map of the number of crimes in 2019</u></h2>
+                    <p align="center"><iframe src="plots_in_html/choropleth2019.html" height="800" width="900" seamless></iframe></p>
+                </div>
+            </div>  
+            
+            <div class="row">
+                <div class="column">
+                    <pre><code class=" python">
+                        import pandas as pd
+                        import json
+                        import plotly.express as px 
+
+                        df = pd.read_csv('Specific_Cols.csv') 
+                        #Making two columns, one is the borough name and the second is the count of crimes in each borough
+                        newDF = pd.DataFrame()
+                        newDF = df
+                        newDF['CMPLNT_FR_DT'] = pd.to_datetime(newDF['CMPLNT_FR_DT'])
+ 
+                        #Filtering only 2020
+                        mask = (newDF['CMPLNT_FR_DT'] >= '2020-1-1') & (newDF['CMPLNT_FR_DT'] < '2021-1-1')
+
+                        newDF = newDF.loc[mask]
+                        newDF = newDF['BORO_NM'].value_counts().reset_index()
+                        newDF = newDF.rename({'index':'BORO_NM','BORO_NM':'Count'}, axis=1)
+                        newDF['BORO_NM'] = newDF['BORO_NM'].str.title()
+
+                        #Load geojson to get the geographical features of the boroughs 
+                        nyBoro = json.load(open('Borough Boundaries.geojson', 'r'))
+
+                        #See the id of each borough in geojson 
+                        boro_id_map = {}
+                        for feature in nyBoro['features']:
+                            feature['id'] = feature['properties']['boro_code']
+                            boro_id_map[feature['properties']['boro_name']] = feature['id']
+
+                        #Getting the id number of each borough
+                        newDF['id'] = newDF['BORO_NM'].apply(lambda x: boro_id_map[x])
+
+                        #Making the choropleth map
+                        fig = px.choropleth_mapbox(newDF, locations='id', geojson=nyBoro, color='Count', hover_name='BORO_NM', 
+                                hover_data=['Count'], mapbox_style='carto-positron', center={'lat': 40.7, 'lon': -74}, opacity=0.5)
+                        fig.show()
+                        fig.write_html('choropleth2019.html')
+                    </code></pre>
+                </div>
+                <div class="column">
+                    <h2><u>Choropleth map of the number of crimes in 2020</u></h2>
+                    <p align="center"><iframe src="plots_in_html/choropleth2020.html" height="800" width="900" seamless></iframe></p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="column">
+                    <pre><code class=" python">
+                        import pandas as pd
+                        import json
+                        import plotly.express as px 
+
+                        df = pd.read_csv('Specific_Cols.csv') 
+                        #Making two columns, one is the borough name and the second is the count of crimes in each borough
+                        newDF = pd.DataFrame()
+                        newDF = df
+                        newDF['CMPLNT_FR_DT'] = pd.to_datetime(newDF['CMPLNT_FR_DT'])
+
+                        #Filtering only 2021
+                        mask = (newDF['CMPLNT_FR_DT'] >= '2021-1-1') 
+
+                        newDF = newDF.loc[mask]
+                        newDF = newDF['BORO_NM'].value_counts().reset_index()
+                        newDF = newDF.rename({'index':'BORO_NM','BORO_NM':'Count'}, axis=1)
+                        newDF['BORO_NM'] = newDF['BORO_NM'].str.title()
+
+                        #Load geojson to get the geographical features of the boroughs 
+                        nyBoro = json.load(open('Borough Boundaries.geojson', 'r'))
+
+                        #See the id of each borough in geojson 
+                        boro_id_map = {}
+                        for feature in nyBoro['features']:
+                            feature['id'] = feature['properties']['boro_code']
+                            boro_id_map[feature['properties']['boro_name']] = feature['id']
+
+                        #Getting the id number of each borough
+                        newDF['id'] = newDF['BORO_NM'].apply(lambda x: boro_id_map[x])
+
+                        #Making the choropleth map
+                        fig = px.choropleth_mapbox(newDF, locations='id', geojson=nyBoro, color='Count', hover_name='BORO_NM', 
+                                hover_data=['Count'], mapbox_style='carto-positron', center={'lat': 40.7, 'lon': -74}, opacity=0.5)
+                        fig.show()
+                        fig.write_html('choropleth2019.html')
+                    </code></pre>
+                </div>
+                <div class="column">
+                    <h2><u>Choropleth map of the number of crimes in 2021</u></h2><p align="center"><iframe src="plots_in_html/choropleth2021.html" height="800" width="900" seamless></iframe></p>
+                </div>
+            </div>
+
+        </section>
+                
+                
         <div class="py-5 bg-image-full" style="background-image: url('https://source.unsplash.com/4ulffa6qoKA/1200x800')">
             <!-- Put anything you want here! The spacer below with inline CSS is just for demo purposes!-->
             <div style="height: 10rem"></div>
         </div>
-        
+        <!--
         <section class="py-5">
             <div class="container my-5">
                 
@@ -174,6 +337,89 @@
                 
             </div>
         </section>
+        -->
+        
+        <section class="py-5">
+        
+            <style>
+                .column { float: left;width: 50%; }
+                .citations ul { display:inline-table; }
+                .row:after {content: "";display: table;clear: both;}
+
+            </style>
+
+            <div class="row">
+                <div class="column">
+                        <pre><code class=" python">
+                            #Reference: https://medium.com/analytics-vidhya/generating-maps-with-python-maps-with-markers-part-2-2e291d987821
+                            import pandas as pd
+                            import folium
+                            from folium import plugins 
+
+                            df = pd.read_csv('Specific_Cols.csv') 
+                            df['CMPLNT_FR_DT'] = pd.to_datetime(df['CMPLNT_FR_DT'])
+                            #Filtering only 2019
+                            mask = (df['CMPLNT_FR_DT'] < '2020-1-1') 
+                            df = df.loc[mask]
+
+                            nyc_map = folium.Map(location=[40.7128, -74.006], zoom_start=11)
+
+                            incidents = plugins.MarkerCluster().add_to(nyc_map)
+
+                            for lat, lng, label, in zip(df.Latitude, df.Longitude, df.OFNS_DESC):
+                                folium.Marker(
+                                location=[lat, lng],
+                                icon=None,
+                                popup=label,
+                            ).add_to(incidents)
+
+                            nyc_map.save('Folium2021MarkerCluster.html')
+                        </code></pre>
+                </div>
+                <div class="column">
+                    <h2><u>Folium map of the types of crimes in 2019</u></h2>
+                    <p align="center"><iframe src="plots_in_html/Folium2019MarkerCluster.html" height="600" width="800" seamless></iframe></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                        <pre><code class=" python">
+                            #Reference: https://medium.com/analytics-vidhya/generating-maps-with-python-maps-with-markers-part-2-2e291d987821
+                            import pandas as pd
+                            import folium
+                            from folium import plugins 
+
+                            df = pd.read_csv('Specific_Cols.csv') 
+                            df['CMPLNT_FR_DT'] = pd.to_datetime(df['CMPLNT_FR_DT'])
+                            #Filtering only 2020
+                            mask = (df['CMPLNT_FR_DT'] >= '2020-1-1') & (df['CMPLNT_FR_DT'] < '2021-1-1')
+
+                            nyc_map = folium.Map(location=[40.7128, -74.006], zoom_start=11)
+
+                            incidents = plugins.MarkerCluster().add_to(nyc_map)
+
+                            for lat, lng, label, in zip(df.Latitude, df.Longitude, df.OFNS_DESC):
+                                folium.Marker(
+                                location=[lat, lng],
+                                icon=None,
+                                popup=label,
+                            ).add_to(incidents)
+
+                            nyc_map.save('Folium2021MarkerCluster.html')
+                        </code></pre>
+                </div>
+                <div class="column">
+                    <h2><u>Folium map of the types of crimes in 2020</u></h2>
+                    <p align="center"><iframe src="plots_in_html/Folium2020MarkerCluster.html" height="600" width="800" seamless></iframe></p>
+                </div>
+            </div>
+        
+        </section>
+        
+        
+        
+        
         
         
         <section class="py-5">
